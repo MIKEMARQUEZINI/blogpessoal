@@ -67,24 +67,19 @@ public class PostagemController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Postagem> put(@Valid @RequestBody Postagem postagem) {
-		Optional<Postagem> postagemOptional = postagemRepository.findById(id);
+	public ResponseEntity<Postagem> put(@Valid @RequestBody Postagem postagem){
+		if (postagemRepository.existsById(postagem.getId())){
 
-		if (postagemOptional.isPresent()) {
-			Postagem postagemAtual = postagemOptional.get();
+			if (temaRepository.existsById(postagem.getTema().getId()))
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(postagemRepository.save(postagem));
 
-			// Mantém a contagem de visualizações da postagem atual
-			postagem.setVisualiacao(postagemAtual.getVisualiacao());
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe!", null);
 
-			if (temaRepository.existsById(postagem.getTema().getId())) {
-				postagem.setId(id); // Define o ID da postagem atualizada
-				return ResponseEntity.ok(postagemRepository.save(postagem));
-			} else {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe");
-			}
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
