@@ -66,8 +66,8 @@ public class PostagemController {
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe", null);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Postagem> put(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
+	@PutMapping
+	public ResponseEntity<Postagem> put(@Valid @RequestBody Postagem postagem) {
 		Optional<Postagem> postagemOptional = postagemRepository.findById(id);
 
 		if (postagemOptional.isPresent()) {
