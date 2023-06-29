@@ -23,7 +23,7 @@ public class Tema {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull(message = "Este campo DESCRIÇÃO é de preenchimento obrigatório")
+	@NotBlank(message = "Este campo DESCRIÇÃO é de preenchimento obrigatório")
 	private String descricao;
 	
 	
